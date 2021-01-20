@@ -1,0 +1,315 @@
+﻿.clearfix {
+    margin-top: -25vh;
+}
+
+.profile-left {
+    padding-left: 0;
+    padding-right: 30px;
+}
+
+.profile-right {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* PROFILE BANNER COLUMN */
+
+.profile-banner {
+    height: 70vh;
+    width: 100%;
+    background: #f0f0f0;
+    position: relative;
+    box-shadow: 0px 0px 10px 1px #121212;
+    overflow: hidden;
+}
+
+.profile-banner-bg {
+    background: url("../Media/img/Others.png") no-repeat;
+    background-size: cover;
+    height: 250px;
+    filter: brightness(0.5) blur(2px);
+    transform: scale(1.1);
+    position: relative;
+    z-index: 0;
+}
+
+.profile-nameplate {
+    position: relative;
+    top: -210px;
+}
+
+.user-avatar {
+    background: #F5454D;
+    width: 69px;
+    height: 69px;
+    text-align: center;
+    border-radius: 50%;
+    box-shadow: 0px 0px 7px 1px #121212;
+    position: relative;
+    /*top: -160px;*/
+    left: 40px;
+    z-index: 10;
+}
+
+.user-avatar p {
+    font-size: 44px;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+    padding-top: 2px;
+    line-height: 69px;
+}
+
+.profile-banner h1 {
+    font-weight: bold;
+    color: white;
+}
+
+.profile-banner h5 {
+    color: #CCCCCC;
+}
+
+.user-nameplate {
+    position: relative;
+    top: -87px;
+    left: 130px;
+    z-index: 10;
+}
+
+/* PROFILE NAV */
+.profile-nav {
+    background: #f0f0f0;
+    margin-top: -155px;
+    position: relative;
+    z-index: 100;
+    padding-top: 0px;
+    box-shadow: 0px -10px 10px -5px #121212;
+}
+
+.profile-nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.profile-nav ul li {
+    height: 50px;
+}
+
+.profile-nav ul li a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #121212;
+    font-size: 18px;
+    line-height: 50px;
+    padding-left: 40px;
+    margin: auto;
+    border-left: 4px solid transparent;
+    transition: all 0.5s ease;
+}
+
+.profile-nav ul li a:hover, .profile-nav ul li a:focus, .profile-nav ul li a:active {
+    text-decoration: none;
+    color: #121212;
+    transition: all 0.5s ease;
+}
+
+.profile-nav ul li a:hover {
+    border-left: 4px solid #F5454D;
+    transition: all 0.5s ease;
+}
+
+.profile-nav ul li a.active {
+    font-weight: bold;
+    color: #F5454D;
+    background: white;
+    border-left: 4px solid #F5454D;
+    box-shadow: 0px 0px 10px -5px #121212;
+    transition: all 0.5s ease;
+}
+
+.profile-nav ul li a.active i {
+    color: #F5454D;
+    transition: all 0.5s ease;
+}
+
+.profile-nav ul li a i {
+    width: 20px;
+    height: 18px;
+    color: #808080;
+    padding-right: 50px;
+}
+
+
+/*====================================================================================*/
+/* PROFILE CONTENT COLUMN */
+.profile-content {
+    float: right;
+    height: 70vh;
+    width: 100%;
+    background: #f0f0f0;
+    padding: 40px 50px 50px 50px;
+    border-top: 10px solid #F5454D;
+    box-shadow: 0px 0px 7px 1px #121212;
+    overflow: hidden;
+}
+
+.profile-content .pc {
+    display: none;
+}
+
+.profile-content .active {
+    display: block !important;
+}
+
+.profile-content h1 {
+    font-weight: bold;
+    font-size: 44px;
+    margin: 0;
+}
+
+.profile-content h3 {
+    font-weight: bold;
+    font-size: 22px;
+    color: #F5454D;
+    margin: 0 0 40px 0;
+}
+
+/* Profile Content: Account Information */
+.form-edit {
+    position: relative;
+    margin: 0;
+}
+
+.text-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.text-label-half {
+    position: absolute;
+    top: 0px;
+    left: 55%;
+}
+
+.text-input:not(:placeholder-shown):invalid {
+    border: 2px solid red;
+}
+
+.text-input {
+    font-size: 18px;
+    width: 100%;
+    border: none;
+    border: 2px solid #808080;
+    outline: none;
+    padding: 10px 0px 10px 40px;
+    color: #808080;
+    background: transparent;
+    transition: all 0.5s ease;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.text-input-firsthalf {
+    width: 50%;
+}
+
+.text-input-secondhalf {
+    position: absolute;
+    right: 0px;
+    width: 45%;
+    padding: 10px 0px 10px 15px;
+}
+
+.text-input-secondhalf-icon {
+    padding: 10px 0px 10px 40px;
+}
+
+.editable {
+    cursor: text;
+    color: #121212;
+    background: white;
+    pointer-events: all;
+}
+
+.editable:hover, .editable:focus {
+    outline: none;
+    border: 2px solid #F5454D;
+    color: #F5454D;
+    transition: all 0.5s ease;
+}
+
+.editable:hover + .text-icon, .editable:focus + .text-icon {
+    color: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.text-icon {
+    position: relative;
+    top: -36px;
+    left: 11px;
+    width: 22px;
+    height: 22px;
+    color: #808080;
+    font-size: 22px;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.text-icon:hover {
+    cursor: text;
+    color: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.text-icon-half {
+    position: absolute;
+    top: 47px;
+    left: 12px;
+}
+
+.text-icon-secondhalf {
+    position: absolute;
+    top: 47px;
+    left: 57%;
+}
+
+.saveBtn {
+    border: none;
+    position: absolute !important;
+    right: 50px;
+    bottom: 50px;
+    width: 150px;
+    letter-spacing: 1px;
+    box-shadow: 0px 0px 10px -3px #121212;
+}
+
+.saveText {
+    font-weight: normal;
+}
+
+
+
+/* Billing Info */
+.text-input-ced {
+    width: 60%;
+}
+
+.text-input-cvc {
+    position: absolute;
+    right: 0px;
+    width: 35%;
+    padding: 10px 0px 10px 40px;
+}
+
+.text-icon-cvc {
+    position: absolute;
+    top: 47px;
+    left: 67%;
+}
+
+.text-label-cvc {
+    position: absolute;
+    top: 0px;
+    left: 65%;
+}

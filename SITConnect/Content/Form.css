@@ -1,0 +1,225 @@
+﻿/* TEXT-COLUMN */
+.text-col {
+    position: relative;
+    height: 100vh;
+    padding: 7vw;
+    font-family: 'Lato', sans-serif;
+    color: white;
+    z-index: 10;
+}
+
+.text-wrapper {
+    position: relative;
+    top: 25vh;
+    margin: 0;
+    text-align: center;
+}
+
+.text-title {
+    font-size: 80px;
+    font-weight: bold;
+}
+
+.text-subtitle {
+    font-size: 24px;
+    font-weight: 300;
+}
+
+.backBtn {
+    font-size: 16px;
+}
+
+.backBtn i {
+    width: 15px;
+    height: 15px;
+    font-size: 14px;
+}
+
+.backBtn span {
+    display: inline-block;
+}
+
+.backBtn span::after {
+    content: "";
+    display: block;
+    height: 2px;
+    position: relative;
+    background: #337ab7;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    bottom: -1px;
+    width: 0%;
+    left: 50%;
+}
+
+.backBtn:hover, .backBtn:focus, .backBtn:active {
+    text-decoration: none;
+    color: #337ab7;
+}
+
+.backBtn:hover span::after {
+    width: 100%;
+    left: 0;
+}
+
+/* FORM-COLUMN */
+.form-col {
+    position: relative;
+    font-family: 'Lato', sans-serif;
+    background: #f0f0f0;
+    height: 100vh;
+    padding: 40px;
+    z-index: 1000;
+}
+
+.form-wrapper {
+    position: relative;
+    color: #121212;
+    text-align: left;
+    max-width: 500px;
+    margin: auto;
+}
+
+.registration-col {
+    animation: 1s ease-out 0s 1 slideInFromRight;
+}
+
+.registration-text {
+    animation: 1s ease-out 0s 1 slideInFromRight;
+}
+
+.registration-wrapper {
+    top: 5vh;
+}
+
+.login-col {
+    animation: 0.7s ease-out 0s 1 slideInFromLeft;
+}
+
+.login-text {
+    animation: 0.7s ease-out 0s 1 slideInFromLeft;
+}
+
+.login-wrapper {
+    top: 20vh;
+}
+
+/* FORM ANIMS */
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-60%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(60%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.form-title {
+    font-size: 56px;
+    font-weight: bold;
+}
+
+.form-group {
+    position: relative;
+    margin: 0;
+}
+
+.text-label {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.text-label-half {
+    position: absolute;
+    top: 0px;
+    left: 55%;
+}
+
+.error-label {
+    color: red;
+    margin-left: -20px;
+}
+
+.text-input:not(:placeholder-shown):invalid {
+    border: 2px solid red;
+}
+
+.text-input {
+    font-size: 18px;
+    width: 100%;
+    border: none;
+    border: 2px solid #808080;
+    outline: none;
+    padding: 10px 0px 10px 40px;
+    transition: all 0.5s ease;
+}
+
+.text-input-firsthalf {
+    width: 50%;
+}
+
+.text-input-secondhalf {
+    position: absolute;
+    right: 0px;
+    width: 45%;
+    padding: 10px 0px 10px 15px;
+}
+
+.text-input-secondhalf-icon {
+    padding: 10px 0px 10px 40px;
+}
+
+.text-input:hover, .text-input:focus {
+    outline: none;
+    border: 2px solid #F5454D;
+    color: #F5454D;
+    transition: all 0.5s ease;
+}
+
+.text-input:hover + .text-icon, .text-input:focus + .text-icon {
+    color: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.text-icon {
+    position: relative;
+    top: -36px;
+    left: 12px;
+    color: #808080;
+    font-size: 22px;
+    pointer-events: none;
+    transition: all 0.5s ease;
+}
+
+.text-icon:hover {
+    cursor: text;
+    color: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.text-input:hover + .text-input + .text-icon, .text-input:focus + .text-icon {
+    color: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.text-icon-half {
+    position: absolute;
+    top: 47px;
+    left: 12px;
+}
+
+.text-icon-secondhalf {
+    position: absolute;
+    top: 47px;
+    left: 57.5%;
+}

@@ -1,0 +1,117 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="SITConnect.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> <%if (MainContent.Page.Title == "SITConnect") {%><%} else {%> | SITConnect<%}%></title>
+
+    <%-- FONTAWESOME --%>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/398610509e.js" crossorigin="anonymous"></script>
+
+    <%-- JQUERY --%>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.1/web-animations.min.js"></script>
+
+    <%-- GOOGLE reCAPTCHA v3 --%>
+    <%-- Should be on all pages, for Google to more accurately identify suspicious or illegitimate behaviour and analytics --%>
+    <%-- Not sure about the privacy aspect of this, but ehhh... --%>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeAKSQaAAAAAAfKMKanuxZabtNvpSiOMVtHtMyj"></script>
+
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="Media/img/logo.png" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body id="body">
+    <form runat="server" id="form1">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><%} else {%>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container nopadding">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+                <a class="navbar-brand nav-site" runat="server" href="~/">SITConnect</a>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <%if (String.IsNullOrEmpty(Session["userid"] as string)) {%>
+                        <li><a runat="server" class="nav-item" href="~/Login"><i class="fas fa-unlock-alt"></i> Login</a></li>
+                        <li><a runat="server" class="nav-item theme-red" href="~/Registration"><i class="fas fa-user-plus"></i> Register</a></li>
+                        <%} else {%>
+                        <li><a runat="server" class="nav-item theme-red" href="~/UserProfile"><i class="fas fa-user"></i> Profile</a></li>
+                        <%--<li><a runat="server" class="nav-item theme-red" href="~/"><i class="fas fa-sign-out-alt"></i> Logout</a></li>--%>
+                        <%}%>
+                        <li class="nav-separator">|</li>
+                        <li class="nav-search">
+                            <input class="nav-searchInput" type="text" placeholder="Search products by name...">
+                            <button class="nav-searchButton" type="button"><i class="fas fa-search"></i></button>
+                        </li>
+                        <li><a runat="server" class="nav-item" href="~/Contact"><i class="fas fa-shopping-cart"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <%}%>
+
+        <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><div class="form-bg"></div><%} else {%><div class="body-bg"></div><%}%>
+        <div class="<%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><%} else {%>container <%}%>body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><%} else {%>
+                <hr />
+                <footer>
+                    <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+                </footer>
+            <%}%>
+        </div>
+    </form>
+</body>
+<script>
+    $(document).ready(function () {
+        cd();
+    });
+
+    function cd() {
+        var str = "<%=Session["userid"]%>";
+        if (str != "") {
+            var timeout = 900000; // 15 minutes
+            setInterval(reloadPage, timeout);
+        }
+    }
+    function reloadPage() {
+        alert("Oops! Your session has expired, please login again...");
+        location.reload();
+    }
+</script>
+</html>

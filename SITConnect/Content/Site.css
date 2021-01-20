@@ -1,0 +1,423 @@
+﻿/* FONT IMPORTS */
+@import url('https://fonts.googleapis.com/css2?family=Yellowtail&display=swap');
+
+
+/* ESSENTIALS */
+.nopadding {
+    padding: 0 !important;
+}
+
+/* COLORS */
+.theme-yellow {
+    color: #F8D659 !important;
+}
+
+.theme-white {
+    color: #F0F0F0 !important;
+}
+
+.theme-black {
+    color: #121212 !important;
+}
+
+.theme-red {
+    color: #F5454D !important;
+}
+
+/* PLACEHOLDER */
+::placeholder {
+    color: #808080;
+    opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #808080;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #808080;
+}
+
+/* Move down content because we have a fixed navbar that is 60px tall */
+body {
+    background-color: #F8D659;
+    padding-top: 80px;
+    font-family: 'Lato', sans-serif;
+    overflow-x: hidden;
+}
+
+.body-bg {
+    background-color: #121212;
+    height: 42vh;
+    margin-top: -80px;
+}
+
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.form-bg {
+    background: url("../Media/img/bg1b.png") no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: brightness(0.5);
+    height: 100vh;
+    margin-top: -80px;
+}
+
+.form-content {
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+/* TOOLTIPS */
+.tooltip {
+    font-family: 'Lato', sans-serif !important;
+    font-size: 15px;
+}
+
+.tooltip-inner {
+    max-width: 400px !important;
+    padding: 10px 20px;
+    color: #fff;
+    text-align: left;
+    background-color: #000;
+    border-radius: 5px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+/*input,
+select,
+textarea {
+    max-width: 280px;
+}*/
+
+/* NAVBAR */
+.navbar {
+    background: rgba(18,18,18,0.7);
+    color: #808080 !important;
+    border: none !important;
+    height: 80px;
+}
+
+.navbar-nav {
+    float: left;
+    padding: 15px 15px;
+}
+
+.nav-site {
+    font-family: 'Yellowtail', cursive;
+    font-size: 50px;
+    height: 60px !important;
+    background: #f5454d;
+    color: white !important;
+    position: relative;
+    margin-left: 0px !important;
+    padding: 30px 45px 50px 30px;
+    -webkit-transition-duration: 0.5s;
+}
+
+.nav-site:hover, .nav-site:focus, .nav-site:active {
+    color: white;
+    background: #f5454d !important;
+    text-decoration: none !important;
+    transition-duration: 0.5s;
+}
+
+.nav-site::after {
+    content: "";
+    display: block;
+    height: 2px;
+    position: relative;
+    background: white;
+    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+    bottom: -15px;
+    width: 0%;
+    left: 50%;
+}
+
+.nav-site:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* NAV SEARCH */
+.nav-search {
+    margin-top: -10px;
+}
+
+.nav-search:hover > .nav-searchInput, .nav-searchInput:focus {
+    width: 240px;
+    border-color: white;
+    color: white;
+}
+
+.nav-search:hover > .nav-searchButton, .nav-searchInput:focus + .nav-searchButton {
+    color: white;
+    transition-duration: 0.5s;
+}
+
+.nav-searchButton {
+    background: transparent;
+    border: none;
+    color: #808080;
+    font-size: 18px;
+    padding: 0;
+    -webkit-transition-duration: 0.5s;
+}
+
+.nav-searchInput {
+    padding: 10px 0px 2px 2px;
+    font-size: 18px;
+    background: transparent;
+    color: #808080;
+    border: none;
+    width: 0px;
+    border-bottom: 1px solid transparent;
+    -webkit-transition-duration: 0.5s;
+}
+
+.nav-searchInput:hover, .nav-searchInput:focus, .nav-searchInput:active {
+    background: transparent;
+    transition-duration: 0.5s;
+}
+
+.nav-item {
+    padding: 0 !important;
+    line-height: unset !important;
+    font-family: Lato, sans-serif;
+    font-size: 18px;
+    -webkit-transition-duration: 0.5s;
+}
+
+.nav-item i {
+    font-size: 18px;
+    margin-top: -4px;
+}
+
+.nav-item:hover {
+    color: white;
+    transition: 0.5s;
+}
+
+.navbar-nav {
+    margin-top: 15px;
+    float: right !important;
+}
+
+.navbar-nav li {
+    padding-left: 25px !important;
+}
+
+.nav-separator {
+    font-size: 18px;
+}
+
+
+
+/* SITE-WIDE STANDARDISATION */
+.title {
+    font-size: 60px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    padding: 0;
+}
+
+
+.closeBtn {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    z-index: 9999;
+    font-size: 69px;
+    font-weight: 100;
+    line-height: 0.5;
+    color: #121212;
+    opacity: 0.5;
+    transition: all 0.5s ease;
+}
+
+.closeBtn:hover, .closeBtn:focus, .closeBtn:active {
+    color: #121212;
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+.closeBtn-inverse {
+    color: #f0f0f0 !important;
+}
+
+.closeBtn-inverse:hover, .closeBtn-inverse:focus, .closeBtn-inverse:active {
+    color: #f0f0f0 !important;
+}
+
+
+.btn-rect {
+    display: inline-block;
+    position: relative;
+    bottom: 5px;
+    width: 200px;
+    height: 50px;
+    color: white;
+    text-decoration: none;
+    background: #F5454D;
+    outline: none !important;
+    padding: 0;
+    border: none;
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 5px;
+    transition: all 0.5s ease;
+}
+
+.btn-rect-full {
+    border: 2px solid #F5454D;
+    width: 100% !important;
+}
+
+.btn-rect:focus, .btn-rect:hover {
+    cursor: pointer;
+    /*bottom: 10px;*/
+    outline: none;
+    color: white;
+    text-decoration: none !important;
+    transition: 0.5s;
+    /*box-shadow: 0 5px 15px black;*/
+}
+
+.btn-rect .fas {
+    position: absolute;
+    top: 14px;
+    right: 15px;
+}
+
+.btn-rect-full:hover {
+    border: 2px solid #F5454D;
+}
+
+
+.btn-rect:hover {
+    color: #F5454D;
+    background: #f0f0f0;
+    transition: all 0.5s ease;
+}
+
+.btn-rect span {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding-top: 9px;
+}
+
+.btn-rect:before,
+.btn-rect:after {
+    position: absolute;
+    content: "";
+    right: 0;
+    top: 0;
+    background: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.btn-rect-full:before,
+.btn-rect-full:after {
+    background: #F5454D !important;
+}
+
+.btn-rect:before {
+    height: 0%;
+    width: 2px;
+}
+
+.btn-rect:after {
+    width: 0%;
+    height: 2px;
+}
+
+.btn-rect:hover:before {
+    height: 100%;
+}
+
+.btn-rect:hover:after {
+    width: 100%;
+}
+
+.btn-rect-full span:before,
+.btn-rect-full span:after {
+    background: #F5454D !important;
+}
+
+.btn-rect span:before,
+.btn-rect span:after {
+    position: absolute;
+    content: "";
+    left: 0;
+    bottom: 0;
+    background: #F5454D !important;
+    transition: all 0.5s ease;
+}
+
+.btn-rect span:before {
+    width: 2px;
+    height: 0%;
+}
+
+.btn-rect span:after {
+    width: 0%;
+    height: 2px;
+}
+
+.btn-rect span:hover:before {
+    height: 100%;
+}
+
+.btn-rect span:hover:after {
+    width: 100%;
+}
+
+
+.btn-small {
+    width: 150px;
+    letter-spacing: 1px;
+    box-shadow: 0px 0px 10px -3px #121212;
+}
+
+
+/* DATERANGEPICKER */
+/* DATERANGEPICKER CHANGE BACKGROUND AND BORDER */
+.drp-calendar {
+    background: white;
+    border-color: #808080;
+}
+
+.daterangepicker.drop-up::before {
+    border-top: 7px solid #808080;
+}
+
+/* DATERANGEPICKER CHANGE COLOR*/
+.daterangepicker .active {
+    background: #F5454D !important;
+    color: white !important;
+}
+/* DATERANGEPICKER CHANGE FONT*/
+.daterangepicker {
+    font-family: 'Lato', sans-serif !important;
+}
+
+.daterangepicker .calendar-table th, .daterangepicker .calendar-table td {
+    font-size: 15px !important;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+    .jumbotron {
+        margin-top: 20px;
+    }
+
+    .body-content {
+        padding: 0;
+    }
+}
