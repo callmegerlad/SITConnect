@@ -96,6 +96,42 @@ namespace SITConnect
         protected global::System.Web.UI.WebControls.Button btnSubmit;
 
         /// <summary>
+        /// tb_CurrentPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_CurrentPassword;
+
+        /// <summary>
+        /// tb_NewPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_NewPassword;
+
+        /// <summary>
+        /// tb_NewPasswordConfirm control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_NewPasswordConfirm;
+
+        /// <summary>
+        /// changePassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button changePassword;
+
+        /// <summary>
         /// tb_CardNumber control.
         /// </summary>
         /// <remarks>

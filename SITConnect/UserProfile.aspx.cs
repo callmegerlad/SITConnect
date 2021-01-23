@@ -326,5 +326,10 @@ namespace SITConnect
             finally { }
             return plainText;
         }
+
+        protected void changePassword_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
