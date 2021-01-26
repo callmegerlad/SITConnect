@@ -78,6 +78,33 @@ namespace SITConnect
         protected global::System.Web.UI.WebControls.TextBox tb_DOB;
 
         /// <summary>
+        /// tb_CardNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_CardNumber;
+
+        /// <summary>
+        /// tb_CardExpDate control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_CardExpDate;
+
+        /// <summary>
+        /// tb_CardVerification control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox tb_CardVerification;
+
+        /// <summary>
         /// btn_submit control.
         /// </summary>
         /// <remarks>

@@ -60,15 +60,6 @@ namespace SITConnect
         protected global::System.Web.UI.WebControls.TextBox tb_LastName_Edit;
 
         /// <summary>
-        /// tb_EmailAddress_Edit control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox tb_EmailAddress_Edit;
-
-        /// <summary>
         /// tb_PhoneNumber_Edit control.
         /// </summary>
         /// <remarks>
@@ -175,5 +166,14 @@ namespace SITConnect
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnLogout;
+
+        /// <summary>
+        /// HiddenButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button HiddenButton;
     }
 }

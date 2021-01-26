@@ -6,14 +6,20 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 namespace SITConnect
 {
     public partial class UserProfile : System.Web.UI.Page
     {
+        // Variables
+        int minimumPasswordAge = 5; // in minutes
+
+        // DB
         string MYDBConnectionString =
             System.Configuration.ConfigurationManager.ConnectionStrings["MYDBConnection"].ConnectionString;
         byte[] Key;
@@ -31,29 +37,29 @@ namespace SITConnect
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!Page.IsPostBack)
+            // check that userid session, authtoken session and cookie exist
+            if (Session["UserID"] != null && Session["AuthToken"] != null && Request.Cookies["AuthToken"] != null)
             {
-                // check that userid session, authtoken session and cookie exist
-                if (Session["UserID"] != null && Session["AuthToken"] != null && Request.Cookies["AuthToken"] != null)
+                // all 3 are not null, now check if session authtoken and cookie authtoken are the same, prevent session fixation
+                if (!Session["AuthToken"].ToString().Equals(Request.Cookies["AuthToken"].Value))
                 {
-                    // all 3 are not null, now check if session authtoken and cookie authtoken are the same, prevent session fixation
-                    if (!Session["AuthToken"].ToString().Equals(Request.Cookies["AuthToken"].Value))
+                    Response.Redirect("~/Login", false);
+                }
+                else
+                {
+                    if (!Page.IsPostBack)
                     {
-                        Response.Redirect("~/Login", false);
-                    }
-                    else
-                    {
-                        this.Form.DefaultButton = btnSubmit.UniqueID;
+                        this.Form.DefaultButton = HiddenButton.UniqueID;
                         retrieveUserInfo(Session["UserID"].ToString());
                         // user nameplate
-                        userAvatar.Text = firstName.Substring(0,1);
+                        userAvatar.Text = firstName.Substring(0, 1);
                         userName.Text = firstName + " " + lastName;
                         userEmail.Text = emailAddress;
 
                         // account information
                         tb_FirstName_Edit.Text = firstName;
                         tb_LastName_Edit.Text = lastName;
-                        tb_EmailAddress_Edit.Text = emailAddress;
+                        //tb_EmailAddress_Edit.Text = emailAddress;
                         tb_PhoneNumber_Edit.Text = phoneNumber;
                         tb_DOB_Edit.Text = dob;
 
@@ -82,10 +88,10 @@ namespace SITConnect
                         }
                     }
                 }
-                else // invalid session, redirect back to login
-                {
-                    Response.Redirect("~/Login", false);
-                }
+            }
+            else // invalid session, redirect back to login
+            {
+                Response.Redirect("~/Login", false);
             }
         }
 
@@ -198,7 +204,7 @@ namespace SITConnect
             {
                 using (SqlConnection con = new SqlConnection(MYDBConnectionString))
                 {
-                    using (SqlCommand cmd = new SqlCommand("UPDATE Account SET FirstName=@FirstName, LastName=@LastName, Email=@Email, PhoneNumber=@PhoneNumber, DOB=@DOB WHERE Email=@UserID"))
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Account SET FirstName=@FirstName, LastName=@LastName, PhoneNumber=@PhoneNumber, DOB=@DOB WHERE Email=@UserID"))
                     {
                         using (SqlDataAdapter sda = new SqlDataAdapter())
                         {
@@ -206,15 +212,12 @@ namespace SITConnect
                             cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
                             cmd.Parameters.AddWithValue("@FirstName", tb_FirstName_Edit.Text.Trim());
                             cmd.Parameters.AddWithValue("@LastName", tb_LastName_Edit.Text.Trim());
-                            cmd.Parameters.AddWithValue("@Email", tb_EmailAddress_Edit.Text.Trim());
                             cmd.Parameters.AddWithValue("@PhoneNumber", tb_PhoneNumber_Edit.Text.Trim());
                             cmd.Parameters.AddWithValue("@DOB", tb_DOB_Edit.Text.Trim());
                             cmd.Connection = con;
                             con.Open();
                             cmd.ExecuteNonQuery();
                             con.Close();
-                            // change session userid
-                            Session["UserID"] = tb_EmailAddress_Edit.Text.Trim();
                             Session["updateMsg"] = "Your account information has been successfully saved!";
                         }
                     }
@@ -327,9 +330,403 @@ namespace SITConnect
             return plainText;
         }
 
+
+        // CHANGE PASSWORD
         protected void changePassword_Click(object sender, EventArgs e)
         {
+            Session["tabNo"] = "2";
+            string userid = Session["UserID"].ToString();
+            string pwd = tb_CurrentPassword.Text.ToString().Trim();
+            string new_pwd = tb_NewPassword.Text.ToString().Trim();
+            string confirm_new_pwd = tb_NewPasswordConfirm.Text.ToString().Trim();
 
+            bool allowPasswordChange = true;
+
+            // Check if password was changed recently, before the minimum password age defined
+            string lastPasswordChange = getLastPasswordChange();
+            // if password was changed before
+            if (lastPasswordChange != "")
+            {
+                TimeSpan ts = DateTime.Now - Convert.ToDateTime(lastPasswordChange);
+                System.Diagnostics.Debug.WriteLine("timespan: "+ts);
+                if (ts.Minutes < minimumPasswordAge)
+                {
+                    System.Diagnostics.Debug.WriteLine("Password change before minimum password age");
+                    Session["errorMsg"] = "Please wait a while before changing your password again! Please try again later...";
+                    allowPasswordChange = false;
+                }
+            }
+
+            if (allowPasswordChange)
+            {
+                // Check if password fields are empty
+                if (pwd == new_pwd)
+                {
+                    Session["errorMsg"] = "Your new password cannot be same as current password. Please try again...";
+                }
+                else
+                {
+                    // Check if new passwords match
+                    if (new_pwd == confirm_new_pwd)
+                    {
+                        // Check if new password meets password requirements
+                        if (validatePassword(new_pwd))
+                        {
+                            string dbHash = getDBHash(userid);
+                            string dbSalt = getDBSalt(userid);
+                            try
+                            {
+                                if (dbSalt != null && dbSalt.Length > 0 && dbHash != null && dbHash.Length > 0)
+                                {
+                                    SHA512Managed hashing = new SHA512Managed();
+                                    string pwdWithSalt = pwd + dbSalt;
+                                    byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwdWithSalt));
+                                    string currentPassHash = Convert.ToBase64String(hashWithSalt);
+
+                                    // SUCCESSFUL LOGIN
+                                    if (currentPassHash.Equals(dbHash))
+                                    {
+                                        // Create new password hash with salt
+                                        string new_pwdWithSalt = new_pwd + dbSalt;
+                                        byte[] new_hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(new_pwdWithSalt));
+                                        string newPassHash = Convert.ToBase64String(new_hashWithSalt);
+                                        // Check if new password hash matches 2 prior passwords (PasswordHistory)
+                                        // New password matches prior passwords, deny change of password and return error msg
+                                        if (newPassHash == getPasswordHistory("1") || newPassHash == getPasswordHistory("2"))
+                                        {
+                                            Session["errorMsg"] = "Your new password must not be the same as any of your recent passwords. Please try again...";
+                                        }
+                                        // New password doesnt match prior passwords, safe to change password
+                                        else
+                                        {
+                                            try
+                                            {
+                                                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                                                {
+                                                    using (SqlCommand cmd = new SqlCommand("UPDATE Account SET PasswordHash=@PasswordHash WHERE Email=@UserID"))
+                                                    {
+                                                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                                                        {
+                                                            cmd.CommandType = CommandType.Text;
+                                                            cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
+                                                            cmd.Parameters.AddWithValue("@PasswordHash", newPassHash);
+                                                            cmd.Connection = con;
+                                                            con.Open();
+                                                            cmd.ExecuteNonQuery();
+                                                            con.Close();
+                                                            Session["updateMsg"] = "Your password has been successfully changed!";
+                                                            // save current passwordhash to PasswordHistory
+                                                            savePasswordHistory(currentPassHash);
+                                                            saveLastPasswordChange();
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                throw new Exception(ex.ToString());
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Session["errorMsg"] = "Something went wrong while changing your password. Please try again...";
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception(ex.ToString());
+                            }
+                        }
+                        else
+                        {
+                            Session["errorMsg"] = "Your new password does not meet the password requirements. Please try again...";
+                        }
+                    }
+                    else
+                    {
+                        Session["errorMsg"] = "Your new passwords do not match. Please try again...";
+                    }
+                }
+            }
+            Response.Redirect("~/UserProfile", false);
+        }
+
+
+
+        // Validate Password
+        public bool validatePassword(string password)
+        {
+            int score = 0;
+            // Password Length
+            if (password.Length < 8)
+            {
+                return false;
+            }
+            else
+            {
+                score = 1;
+            }
+            // Password contain numeral
+            if (Regex.IsMatch(password, "[0-9]"))
+            {
+                score++;
+            }
+            // Password contain lowercase
+            if (Regex.IsMatch(password, "[a-z]"))
+            {
+                score++;
+            }
+            // Password contain uppercase
+            if (Regex.IsMatch(password, "[A-Z]"))
+            {
+                score++;
+            }
+            // Password contain special character
+            if (Regex.IsMatch(password, "^[0-9]|[a-z]|[A-Z]$"))
+            {
+                score++;
+            }
+
+            if (score == 5)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        // Get PasswordHistory
+        public string getPasswordHistory(string no)
+        {
+            string pwdHistory = "";
+            SqlConnection connection = new SqlConnection(MYDBConnectionString);
+            string sql = "SELECT * FROM Account WHERE Email=@userId";
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@userId", Session["UserID"].ToString());
+            try
+            {
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["PasswordHistory"+no] != DBNull.Value)
+                        {
+                            pwdHistory = reader["PasswordHistory"+no].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return pwdHistory;
+        }
+
+
+        // Save Current PasswordHash into PasswordHistory
+        public void savePasswordHistory(string currentPassword)
+        {
+            string ph1 = getPasswordHistory("1");
+            // If PasswordHistory1 is empty, meaning no prior password history, then save current password to it
+            // If PasswordHistory1 is not empty, shift it to PasswordHistory2, then save current password to PasswordHistory1
+            if (ph1 != "")
+            {
+                // Shift PasswordHistory1 to PasswordHistory2
+                try
+                {
+                    using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                    {
+                        using (SqlCommand cmd = new SqlCommand("UPDATE Account SET PasswordHistory2=@PasswordHistory2 WHERE Email=@UserID"))
+                        {
+                            using (SqlDataAdapter sda = new SqlDataAdapter())
+                            {
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
+                                cmd.Parameters.AddWithValue("@PasswordHistory2", ph1);
+                                cmd.Connection = con;
+                                con.Open();
+                                cmd.ExecuteNonQuery();
+                                con.Close();
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.ToString());
+                }
+            }
+            
+            // Save current password to PasswordHistory1
+            try
+            {
+                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Account SET PasswordHistory1=@PasswordHistory1 WHERE Email=@UserID"))
+                    {
+                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
+                            cmd.Parameters.AddWithValue("@PasswordHistory1", currentPassword);
+                            cmd.Connection = con;
+                            con.Open();
+                            cmd.ExecuteNonQuery();
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+
+        // SAVE LAST PASSWORD CHANGE DATETIME
+        public void saveLastPasswordChange()
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                {
+                    using (SqlCommand cmd = new SqlCommand("UPDATE Account SET LastPasswordChange=@LastPasswordChange WHERE Email=@UserID"))
+                    {
+                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                        {
+                            cmd.CommandType = CommandType.Text;
+                            cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
+                            cmd.Parameters.AddWithValue("@LastPasswordChange", DateTime.Now.ToString());
+                            cmd.Connection = con;
+                            con.Open();
+                            cmd.ExecuteNonQuery();
+                            con.Close();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+        }
+
+        // GET LAST PASSWORD CHANGE
+        public string getLastPasswordChange()
+        {
+            string lastPasswordChange = "";
+            SqlConnection connection = new SqlConnection(MYDBConnectionString);
+            string sql = "SELECT * FROM Account WHERE Email=@userId";
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@userId", Session["UserID"].ToString());
+            try
+            {
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["LastPasswordChange"] != DBNull.Value)
+                        {
+                            lastPasswordChange = reader["LastPasswordChange"].ToString();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally
+            {
+                connection.Close();
+            }
+            return lastPasswordChange;
+        }
+
+
+
+
+
+        // DB Hash & Salt
+        public string getDBHash(string userid)
+        {
+            string hash = null;
+
+            SqlConnection connection = new SqlConnection(MYDBConnectionString);
+            string sql = "select PasswordHash FROM Account WHERE Email=@USERID";
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@USERID", userid);
+
+            try
+            {
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["PasswordHash"] != null)
+                        {
+                            if (reader["PasswordHash"] != DBNull.Value)
+                            {
+                                hash = reader["PasswordHash"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally { connection.Close(); }
+            return hash;
+        }
+
+        public string getDBSalt(string userid)
+        {
+            string salt = null;
+
+            SqlConnection connection = new SqlConnection(MYDBConnectionString);
+            string sql = "select PASSWORDSALT FROM Account WHERE Email=@USERID";
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@USERID", userid);
+
+            try
+            {
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (reader["PASSWORDSALT"] != null)
+                        {
+                            if (reader["PASSWORDSALT"] != DBNull.Value)
+                            {
+                                salt = reader["PASSWORDSALT"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally { connection.Close(); }
+            return salt;
         }
     }
 }

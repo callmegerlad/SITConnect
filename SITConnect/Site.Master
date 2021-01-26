@@ -52,7 +52,7 @@
             </Scripts>
         </asp:ScriptManager>
 
-        <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><%} else {%>
+        <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login" || MainContent.Page.Title == "Change Password") {%><%} else {%>
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container nopadding">
                 <div class="navbar-header">
@@ -84,11 +84,11 @@
         </div>
         <%}%>
 
-        <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><div class="form-bg"></div><%} else {%><div class="body-bg"></div><%}%>
-        <div class="<%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><%} else {%>container <%}%>body-content">
+        <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login" || MainContent.Page.Title == "Change Password") {%><div class="form-bg"></div><%} else {%><div class="body-bg"></div><%}%>
+        <div class="<%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login" || MainContent.Page.Title == "Change Password") {%><%} else {%>container <%}%>body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
-            <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login") {%><%} else {%>
+            <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login" || MainContent.Page.Title == "Change Password") {%><%} else {%>
                 <hr />
                 <footer>
                     <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>

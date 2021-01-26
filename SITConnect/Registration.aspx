@@ -27,8 +27,8 @@
                       <b>ERROR! </b><%: Page.Items["errorMsg"]%>
                     </div>
                     <%} else {%>
-                    <%}%>
                     <br />
+                    <%}%>
                     <div class="form-group">
                         <asp:Label runat="server" class="text-label" AssociatedControlId="tb_FirstName">First Name</asp:Label><br />
                         <asp:Textbox runat="server" class="text-input text-input-firsthalf" type="text" id="tb_FirstName" placeholder="Enter your first name" required="required" />
@@ -62,6 +62,20 @@
                         <i class="far fa-calendar-alt text-icon text-icon-secondhalf"></i>
                         <br /><br />
                     </div>
+                    <div class="form-group">
+                        <asp:Label runat="server" class="text-label" AssociatedControlId="tb_CardNumber">Card Number</asp:Label><br />
+                        <asp:TextBox class="text-input editable" data-toggle="tooltip" data-html="true" data-placement="bottom" type="text" runat="server" ID="tb_CardNumber" placeholder="Card number" autocomplete="new-password" MaxLength="19" pattern="[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}" required="required" />
+                        <i class="far fa-credit-card text-icon"></i>
+                    </div>
+                    <div class="form-group">
+                        <asp:Label runat="server" class="text-label" AssociatedControlId="tb_CardExpDate">Expiration Date</asp:Label><br />
+                        <asp:TextBox class="text-input text-input-ced editable" type="text" runat="server" ID="tb_CardExpDate" placeholder="Card's expiration date" autocomplete="new-password" MaxLength="5" pattern="[0-9]{2}/[0-9]{2}" required="required" />
+                        <i class="far fa-calendar-alt text-icon text-icon-half"></i>
+                        <asp:Label runat="server" class="text-label text-label-cvc" AssociatedControlId="tb_CardVerification">CVC / CVV</asp:Label>
+                        <asp:Textbox runat="server"  class="text-input text-input-cvc text-input-secondhalf-icon editable" type="text" id="tb_CardVerification" placeholder="Card's CVC / CVV" MaxLength="3" required="required" />
+                        <i class="fas fa-shield-alt text-icon text-icon-cvc"></i>
+                        <br /><br />
+                    </div>
                     <br />
                     <asp:Button runat="server" CssClass="btn-rect btn-rect-full" ID="btn_submit" OnClick="btn_submit_click" Text="REGISTER" />
                     <br /><br />
@@ -73,21 +87,16 @@
     </div>
     <script>
         $(document).ready(function () {
-            // get today's date
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-
-            today = mm + '/' + dd + '/' + yyyy;
-
             $('input[id="<%=tb_DOB.ClientID%>"]').daterangepicker({
                 opens: 'right',
                 drops: 'up',
                 autoApply: true,
                 singleDatePicker: true,
                 showDropdowns: true,
-                maxDate: today,
+                maxDate: new Date(),
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
             }, function (start, end, label) {
             });
 
@@ -167,5 +176,25 @@
                     .tooltip('hide');
             }
         }
+
+
+        // CARD
+        $('#<%=tb_CardNumber.ClientID%>').keypress(function () {
+            var rawNos = $(this).val().replace(/-/g, '');
+            var cardLen = rawNos.length;
+            if (cardLen !== 0 && cardLen <= 12 && cardLen % 4 == 0) {
+                $(this).val($(this).val() + '-');
+            }
+
+            var str = $(this).val().replace(/-/g, "");
+            console.log(str);
+        });
+
+        $('#<%=tb_CardExpDate.ClientID%>').keypress(function () {
+            var cardLen = $(this).val().length;
+            if (cardLen !== 0 && cardLen <= 2 && cardLen % 2 == 0) {
+                $(this).val($(this).val() + '/');
+            }
+        });
     </script>
 </asp:Content>

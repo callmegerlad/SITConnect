@@ -96,7 +96,6 @@ namespace SITConnect
                 SHA512Managed hashing = new SHA512Managed();
 
                 string pwdWithSalt = pwd + salt;
-                byte[] plainHash = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwd));
                 byte[] hashWithSalt = hashing.ComputeHash(Encoding.UTF8.GetBytes(pwdWithSalt));
 
                 finalHash = Convert.ToBase64String(hashWithSalt);
@@ -125,32 +124,49 @@ namespace SITConnect
 
         protected void createAccount()
         {
+            string cardNumber = tb_CardNumber.Text.Trim();
+            string cardExpDate = tb_CardExpDate.Text.Trim();
+            string cardVerification = tb_CardVerification.Text.Trim();
             try
             {
-                using (SqlConnection con = new SqlConnection(MYDBConnectionString))
+                if (!String.IsNullOrEmpty(cardNumber) && !String.IsNullOrEmpty(cardExpDate) && !String.IsNullOrEmpty(cardVerification))
                 {
-                    using (SqlCommand cmd = new SqlCommand("INSERT INTO Account VALUES(@FirstName,@LastName,@Email,@PhoneNumber,@DOB,@CreditCardInfo,@PasswordHash,@PasswordSalt,@DateTimeRegistered,@IV,@Key)"))
+                    string cardInfo = cardNumber.Replace("-", "") + "," + cardExpDate.Replace("/", "") + "," + cardVerification;
+                    using (SqlConnection con = new SqlConnection(MYDBConnectionString))
                     {
-                        using (SqlDataAdapter sda = new SqlDataAdapter())
+                        using (SqlCommand cmd = new SqlCommand("INSERT INTO Account VALUES(@FirstName,@LastName,@Email,@PhoneNumber,@DOB,@CreditCardInfo,@PasswordHash,@PasswordSalt,@DateTimeRegistered,@IV,@Key,@Attempts,@LastAttempt,@PasswordHistory1,@PasswordHistory2,@LastPasswordChange)"))
                         {
-                            cmd.CommandType = CommandType.Text;
-                            cmd.Parameters.AddWithValue("@FirstName", tb_FirstName.Text.Trim());
-                            cmd.Parameters.AddWithValue("@LastName", tb_LastName.Text.Trim());
-                            cmd.Parameters.AddWithValue("@Email", tb_EmailAddress.Text.Trim());
-                            cmd.Parameters.AddWithValue("@PhoneNumber", tb_PhoneNumber.Text.Trim());
-                            cmd.Parameters.AddWithValue("@DOB", tb_DOB.Text.Trim());
-                            cmd.Parameters.AddWithValue("@CreditCardInfo", "");
-                            cmd.Parameters.AddWithValue("@PasswordHash", finalHash);
-                            cmd.Parameters.AddWithValue("@PasswordSalt", salt);
-                            cmd.Parameters.AddWithValue("@DateTimeRegistered", DateTime.Now);
-                            cmd.Parameters.AddWithValue("@IV", Convert.ToBase64String(IV));
-                            cmd.Parameters.AddWithValue("@Key", Convert.ToBase64String(Key));
-                            cmd.Connection = con;
-                            con.Open();
-                            cmd.ExecuteNonQuery();
-                            con.Close();
+                            using (SqlDataAdapter sda = new SqlDataAdapter())
+                            {
+                                cmd.CommandType = CommandType.Text;
+                                cmd.Parameters.AddWithValue("@FirstName", tb_FirstName.Text.Trim());
+                                cmd.Parameters.AddWithValue("@LastName", tb_LastName.Text.Trim());
+                                cmd.Parameters.AddWithValue("@Email", tb_EmailAddress.Text.Trim());
+                                cmd.Parameters.AddWithValue("@PhoneNumber", tb_PhoneNumber.Text.Trim());
+                                cmd.Parameters.AddWithValue("@DOB", tb_DOB.Text.Trim());
+                                cmd.Parameters.AddWithValue("@CreditCardInfo", Convert.ToBase64String(encryptData(cardInfo)));
+                                cmd.Parameters.AddWithValue("@PasswordHash", finalHash);
+                                cmd.Parameters.AddWithValue("@PasswordSalt", salt);
+                                cmd.Parameters.AddWithValue("@DateTimeRegistered", DateTime.Now);
+                                cmd.Parameters.AddWithValue("@IV", Convert.ToBase64String(IV));
+                                cmd.Parameters.AddWithValue("@Key", Convert.ToBase64String(Key));
+                                cmd.Parameters.AddWithValue("@Attempts", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@LastAttempt", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PasswordHistory1", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@PasswordHistory2", DBNull.Value);
+                                cmd.Parameters.AddWithValue("@LastPasswordChange", DateTime.Now.ToString());
+                                cmd.Connection = con;
+                                con.Open();
+                                cmd.ExecuteNonQuery();
+                                con.Close();
+                            }
                         }
                     }
+                }
+                else
+                {
+                    // if any one of the textboxes are empty, send error msg
+                    Session["errorMsg"] = "Credit Card Information is in an invalid format. Please try again...";
                 }
             }
             catch (SqlException ex)
@@ -166,6 +182,28 @@ namespace SITConnect
                     throw new Exception(ex.ToString());
                 }
             }
+        }
+
+
+        // Encrypt creditCardInfo
+        protected byte[] encryptData(string data)
+        {
+            byte[] cipherText = null;
+            try
+            {
+                RijndaelManaged cipher = new RijndaelManaged();
+                cipher.IV = IV;
+                cipher.Key = Key;
+                ICryptoTransform encryptTransform = cipher.CreateEncryptor();
+                byte[] plainText = Encoding.UTF8.GetBytes(data);
+                cipherText = encryptTransform.TransformFinalBlock(plainText, 0, plainText.Length);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.ToString());
+            }
+            finally { }
+            return cipherText;
         }
     }
 }

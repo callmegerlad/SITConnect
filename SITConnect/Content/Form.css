@@ -81,6 +81,7 @@
 
 .registration-col {
     animation: 1s ease-out 0s 1 slideInFromRight;
+    overflow: visible;
 }
 
 .registration-text {
@@ -88,7 +89,8 @@
 }
 
 .registration-wrapper {
-    top: 5vh;
+    /*top: 5vh;*/
+    top: 0;
 }
 
 .login-col {
@@ -128,6 +130,16 @@
     font-size: 56px;
     font-weight: bold;
 }
+
+.registration-wrapper .form-title {
+    margin: 0;
+    margin-top: -20px;
+}
+
+.registration-wrapper .form-group {
+    height: 100px;
+}
+
 
 .form-group {
     position: relative;
@@ -222,4 +234,29 @@
     position: absolute;
     top: 47px;
     left: 57.5%;
+}
+
+
+/* Billing Info */
+.text-input-ced {
+    width: 60%;
+}
+
+.text-input-cvc {
+    position: absolute;
+    right: 0px;
+    width: 35%;
+    padding: 10px 0px 10px 40px;
+}
+
+.text-icon-cvc {
+    position: absolute;
+    top: 47px;
+    left: 67%;
+}
+
+.text-label-cvc {
+    position: absolute;
+    top: 0px;
+    left: 65%;
 }

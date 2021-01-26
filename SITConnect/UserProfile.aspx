@@ -52,11 +52,11 @@
                             <asp:Textbox runat="server" class="text-input text-input-secondhalf" type="text" id="tb_LastName_Edit" placeholder="Enter your last name" required="required" />
                             <br /><br />
                         </div>
-                        <div class="form-edit">
+                        <%--<div class="form-edit">
                             <asp:Label runat="server" class="text-label" AssociatedControlId="tb_EmailAddress_Edit">Email Address</asp:Label><br />
                             <asp:TextBox class="text-input" type="email" runat="server" ID="tb_EmailAddress_Edit" placeholder="Enter your email address" autocomplete="off"></asp:TextBox>
                             <i class="far fa-envelope text-icon"></i>
-                        </div>
+                        </div>--%>
                         <div class="form-edit">
                             <asp:Label runat="server" class="text-label" AssociatedControlId="tb_PhoneNumber_Edit">Phone Number</asp:Label><br />
                             <asp:TextBox class="text-input text-input-firsthalf" type="text" runat="server" ID="tb_PhoneNumber_Edit" placeholder="Enter your email address" MaxLength="10" autocomplete="off"></asp:TextBox>
@@ -74,6 +74,18 @@
                 </div>
                 <div class="pc-2 pc">
                     <h3>Change Password</h3>
+                    <%if (Page.Items["updateMsg"] != null) {%>
+                    <div class="alert alert-success fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <b>SUCCESS! </b><%: Page.Items["updateMsg"]%>
+                    </div>
+                    <%}%>
+                    <%if (Page.Items["errorMsg"] != null) {%>
+                    <div class="alert alert-danger fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <b>ERROR! </b><%: Page.Items["errorMsg"]%>
+                    </div>
+                    <%}%>
                     <div class="form-edit">
                         <asp:Label runat="server" class="text-label" AssociatedControlID="tb_CurrentPassword">Current Password</asp:Label>
                         <asp:TextBox runat="server" class="text-input editable" TextMode="Password" ID="tb_CurrentPassword" placeholder="Enter your current password" autocomplete="new-password"></asp:TextBox>
@@ -81,12 +93,12 @@
                     </div>
                     <div class="form-edit">
                         <asp:Label runat="server" class="text-label" AssociatedControlID="tb_NewPassword">New Password</asp:Label>
-                        <asp:TextBox runat="server" class="text-input editable" TextMode="Password" ID="tb_NewPassword" placeholder="Enter your new password" autocomplete="new-password"></asp:TextBox>
+                        <asp:TextBox runat="server" data-toggle="tooltip" data-html="true" data-placement="left" class="text-input editable" TextMode="Password" ID="tb_NewPassword" placeholder="Enter your new password" autocomplete="new-password" onkeyup="validate();"></asp:TextBox>
                         <i class="fas fa-lock text-icon"></i>
                     </div>
                     <div class="form-edit">
                         <asp:Label runat="server" class="text-label" AssociatedControlID="tb_NewPasswordConfirm">Confirm New Password</asp:Label>
-                        <asp:TextBox runat="server" data-toggle="tooltip" data-html="true" data-placement="bottom" class="text-input editable" TextMode="Password" ID="tb_NewPasswordConfirm" placeholder="Enter your new password again" autocomplete="new-password" onkeypress="validateChangePassword();"></asp:TextBox>
+                        <asp:TextBox runat="server" data-toggle="tooltip" data-html="true" data-placement="left" class="text-input editable" TextMode="Password" ID="tb_NewPasswordConfirm" placeholder="Enter your new password again" autocomplete="new-password" onkeyup="validateChangePassword();"></asp:TextBox>
                         <i class="fas fa-lock text-icon"></i>
                     </div>
                     <button style="width:250px;" type='button' class="btn-rect saveBtn" onclick="changePassword();"><span><i class="far fa-check-circle" id="changePasswordIcon"></i> <b id="changePasswordText" class="saveText">Change Password</b></span></button>
@@ -142,25 +154,21 @@
             </div>
         </div>
     </div>
+    <asp:Button ID="HiddenButton" style="display:none;" OnClientClick="return false;" runat="server" Text="Button" />
     <script type="text/javascript">
         $(document).ready(function () {
             load();
             // DateRangePicker
-            // get today's date
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0');
-            var yyyy = today.getFullYear();
-
-            today = mm + '/' + dd + '/' + yyyy;
-
             $('input[id="<%=tb_DOB_Edit.ClientID%>"]').daterangepicker({
                 opens: 'right',
                 drops: 'up',
                 autoApply: true,
                 singleDatePicker: true,
                 showDropdowns: true,
-                maxDate: today,
+                maxDate: new Date(),
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
             }, function (start, end, label) {
             });
 
@@ -188,7 +196,7 @@
             // readonly text fields, since having readonly attribute on asp button causes postback issues
             $("#<%=tb_FirstName_Edit.ClientID%>").attr("readonly","readonly");
             $("#<%=tb_LastName_Edit.ClientID%>").attr("readonly", "readonly");
-            $("#<%=tb_EmailAddress_Edit.ClientID%>").attr("readonly","readonly");
+            <%--$("#<%=tb_EmailAddress_Edit.ClientID%>").attr("readonly","readonly");--%>
             $("#<%=tb_PhoneNumber_Edit.ClientID%>").attr("readonly", "readonly");
             $("#<%=tb_DOB_Edit.ClientID%>").attr("readonly", "readonly");
 
@@ -213,6 +221,12 @@
                     $("#tab-" + tabNo).addClass("active");
                 }
             });
+            var all = $(".text-input").map(function () {
+                document.getElementById(this.id).setCustomValidity("");
+            });
+            //if (tabNo == "2") {
+            //    validate();
+            //}
         }
 
         function editable() {
@@ -223,8 +237,10 @@
             $("#<%=tb_LastName_Edit.ClientID%>").addClass("editable");
             $("#<%=tb_LastName_Edit.ClientID%>").removeAttr("readonly");
 
+            <%--
             $("#<%=tb_EmailAddress_Edit.ClientID%>").addClass("editable");
             $("#<%=tb_EmailAddress_Edit.ClientID%>").removeAttr("readonly");
+            --%>
 
             $("#<%=tb_PhoneNumber_Edit.ClientID%>").addClass("editable");
             $("#<%=tb_PhoneNumber_Edit.ClientID%>").removeAttr("readonly");
@@ -243,44 +259,48 @@
 
         function save() {
             // Check input fields validity
-            var email = $("#<%=tb_EmailAddress_Edit.ClientID%>").val();
-            var emailRegex = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
-            console.log("test " + emailRegex.test(email));
+            <%--var email = $("#<%=tb_EmailAddress_Edit.ClientID%>").val();--%>
+            //var emailRegex = /^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$/;
+            //console.log("test " + emailRegex.test(email));
 
-            if (emailRegex.test(email)) {
+            <%--if (emailRegex.test(email)) {--%>
                 // make form fields UNEDITABLE
-                $("#<%=tb_FirstName_Edit.ClientID%>").removeClass("editable");
-                $("#<%=tb_FirstName_Edit.ClientID%>").attr("readonly", "readonly");
+            $("#<%=tb_FirstName_Edit.ClientID%>").removeClass("editable");
+            $("#<%=tb_FirstName_Edit.ClientID%>").attr("readonly", "readonly");
 
-                $("#<%=tb_LastName_Edit.ClientID%>").removeClass("editable");
-                $("#<%=tb_LastName_Edit.ClientID%>").attr("readonly", "readonly");
+            $("#<%=tb_LastName_Edit.ClientID%>").removeClass("editable");
+            $("#<%=tb_LastName_Edit.ClientID%>").attr("readonly", "readonly");
 
+            <%--
                 $("#<%=tb_EmailAddress_Edit.ClientID%>").removeClass("editable");
                 $("#<%=tb_EmailAddress_Edit.ClientID%>").attr("readonly", "readonly");
+            --%>
 
-                $("#<%=tb_PhoneNumber_Edit.ClientID%>").removeClass("editable");
-                $("#<%=tb_PhoneNumber_Edit.ClientID%>").attr("readonly", "readonly");
+            $("#<%=tb_PhoneNumber_Edit.ClientID%>").removeClass("editable");
+            $("#<%=tb_PhoneNumber_Edit.ClientID%>").attr("readonly", "readonly");
 
-                $("#<%=tb_DOB_Edit.ClientID%>").removeClass("editable");
-                $("#<%=tb_DOB_Edit.ClientID%>").attr("readonly", "readonly");
+            $("#<%=tb_DOB_Edit.ClientID%>").removeClass("editable");
+            $("#<%=tb_DOB_Edit.ClientID%>").attr("readonly", "readonly");
 
-                // change text and icon of edit button
-                $("#editText").html("Edit");
-                $("#editIcon").addClass("fa-edit");
-                $("#editIcon").removeClass("fa-check-circle");
+            // change text and icon of edit button
+            $("#editText").html("Edit");
+            $("#editIcon").addClass("fa-edit");
+            $("#editIcon").removeClass("fa-check-circle");
 
-                // change button onclick event
-                $("#editBtn").attr("onclick", "editable();");
+            // change button onclick event
+            $("#editBtn").attr("onclick", "editable();");
 
-                // call backend function to save info
-                var btnSubmit = document.getElementById("<%=btnSubmit.ClientID %>");
-                btnSubmit.click();
+            // call backend function to save info
+            var btnSubmit = document.getElementById("<%=btnSubmit.ClientID %>");
+            btnSubmit.click();
+            <%--
             } else {
                 $("#<%=tb_EmailAddress_Edit.ClientID%>").attr('data-original-title', "Email is invalid!")
                     .tooltip('fixTitle')
                     .tooltip('show')
                     .unbind();
             }
+            --%>
         }
 
         function logout() {
@@ -323,6 +343,7 @@
 
         function changePassword() {
             // call backend function to save info
+            validate();
             var btnSubmit = document.getElementById("<%=changePassword.ClientID %>");
             btnSubmit.click();
         }
@@ -338,9 +359,12 @@
                 element2.setCustomValidity("New passwords mismatch.");
                 errorMsg += "New passwords do not match!";
             }
+            else {
+                element2.setCustomValidity("");
+            }
 
             // ERROR TOOLTIP
-            if (errorMsg.length > 1 && str2.length > 0) {
+            if (errorMsg.length > 0 && str2.length > 0) {
                 $("#<%=tb_NewPasswordConfirm.ClientID%>").attr('data-original-title', "<b>" + errorMsg + "<br>")
                     .tooltip('fixTitle')
                     .tooltip('show')
@@ -352,6 +376,49 @@
                     .tooltip('fixTitle')
                     .tooltip('hide');
             }
+        }
+
+        function validate() {
+            var element = document.getElementById("<%=tb_NewPassword.ClientID%>");
+            var str = element.value;
+            var errorMsg = "";
+
+            if (str.length < 8) {
+                element.setCustomValidity("Password must be at least 8 characters in length.");
+                errorMsg += "- at least 8 characters in length.<br>";
+            }
+
+            if (str.search(/[0-9]/) == -1) {
+                element.setCustomValidity("Password must contain 1 or more numbers.");
+                errorMsg += "- 1 or more numbers.<br>";
+            }
+
+            if (str.search(/[a-z]/) == -1 || str.search(/[A-Z]/) == -1) {
+                element.setCustomValidity("Password must have upper and lowercase letters.");
+                errorMsg += "- upper and lowercase letters.<br>";
+            }
+
+            if (str.search(/[^a-zA-Z0-9]/) == -1) {
+                element.setCustomValidity("Password must have at least 1 special character.");
+                errorMsg += "- at least 1 special character.<br>";
+            }
+
+            // ERROR TOOLTIP
+            if (errorMsg.length > 1) {
+                $("#<%=tb_NewPassword.ClientID%>").attr('data-original-title', "<b>Password must contain:</b><br>" + errorMsg)
+                    .tooltip('fixTitle')
+                    .tooltip('show')
+                    .unbind();
+            }
+            else {
+                element.setCustomValidity("");
+                $("#<%=tb_NewPassword.ClientID%>").attr('data-original-title', "")
+                    .tooltip('fixTitle')
+                    .tooltip('hide');
+            }
+
+            // validate confirm password
+            validateChangePassword();
         }
     </script>
 </asp:Content>

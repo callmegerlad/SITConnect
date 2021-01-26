@@ -16,10 +16,12 @@ namespace SITConnect
 {
     public partial class Login : System.Web.UI.Page
     {
-        string MYDBConnectionString =
-            System.Configuration.ConfigurationManager.ConnectionStrings["MYDBConnection"].ConnectionString;
+        // Variables
         // Timeout in minutes when account is locked out
         int accountLockoutTimeout = 1;
+        // DB
+        string MYDBConnectionString =
+            System.Configuration.ConfigurationManager.ConnectionStrings["MYDBConnection"].ConnectionString;
 
 
         public class MyObject {
@@ -29,6 +31,11 @@ namespace SITConnect
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Request.UrlReferrer != null && Request.UrlReferrer.ToString().Contains("ChangePassword"))
+            {
+                System.Diagnostics.Debug.WriteLine("refer from "+ Request.UrlReferrer.ToString());
+                Session["successMsg"] = "Your password has been successfully changed!";
+            }
             if (Session["successMsg"] != null)
             {
                 Page.Items["successMsg"] = Session["successMsg"].ToString();
@@ -253,7 +260,7 @@ namespace SITConnect
                             cmd.CommandType = CommandType.Text;
                             cmd.Parameters.AddWithValue("@UserID", tb_EmailAddress.Text.ToString());
                             cmd.Parameters.AddWithValue("@Attempts", getAttempts() + 1);
-                            cmd.Parameters.AddWithValue("@LastAttempt", DateTime.Now);
+                            cmd.Parameters.AddWithValue("@LastAttempt", DateTime.Now.ToString());
                             cmd.Connection = con;
                             con.Open();
                             cmd.ExecuteNonQuery();

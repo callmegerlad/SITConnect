@@ -73,7 +73,6 @@ D:\Users\geral\Documents\NYP\2020 SEM 2\AS\Assignment\SITConnect\SITConnect\obj\
 D:\Users\geral\Documents\NYP\2020 SEM 2\AS\Assignment\SITConnect\SITConnect\obj\Debug\SITConnect.csproj.CopyComplete
 D:\Users\geral\Documents\NYP\2020 SEM 2\AS\Assignment\SITConnect\SITConnect\obj\Debug\SITConnect.dll
 D:\Users\geral\Documents\NYP\2020 SEM 2\AS\Assignment\SITConnect\SITConnect\obj\Debug\SITConnect.pdb
-D:\Users\geral\Documents\NYP\2020 SEM 2\AS\Assignment\SITConnect\SITConnect\obj\Debug\SITConnect.csprojAssemblyReference.cache
 C:\Users\geral\Source\Repos\SITConnect\SITConnect\bin\App_Data\MYDB.mdf
 C:\Users\geral\Source\Repos\SITConnect\SITConnect\bin\App_Data\MYDB_log.ldf
 C:\Users\geral\Source\Repos\SITConnect\SITConnect\bin\SITConnect.dll.config
@@ -150,3 +149,4 @@ C:\Users\geral\Source\Repos\SITConnect\SITConnect\obj\Debug\SITConnect.csproj.Co
 C:\Users\geral\Source\Repos\SITConnect\SITConnect\obj\Debug\SITConnect.dll
 C:\Users\geral\Source\Repos\SITConnect\SITConnect\obj\Debug\SITConnect.pdb
 C:\Users\geral\Source\Repos\SITConnect\SITConnect\obj\Debug\SITConnect.csprojAssemblyReference.cache
+D:\Users\geral\Documents\NYP\2020 SEM 2\AS\Assignment\SITConnect\SITConnect\obj\Debug\SITConnect.csprojAssemblyReference.cache

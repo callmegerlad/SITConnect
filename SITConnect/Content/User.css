@@ -151,7 +151,7 @@
     padding: 40px 50px 50px 50px;
     border-top: 10px solid #F5454D;
     box-shadow: 0px 0px 7px 1px #121212;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 
 .profile-content .pc {
