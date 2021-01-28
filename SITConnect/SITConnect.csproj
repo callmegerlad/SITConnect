@@ -126,6 +126,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\User.css" />
     <Content Include="CustomError\Error404.aspx" />
+    <Content Include="CustomError\Error500.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="CustomError\Error404.html" />
     <Content Include="favicon.ico" />
@@ -213,6 +214,13 @@
     </Compile>
     <Compile Include="CustomError\Error404.aspx.designer.cs">
       <DependentUpon>Error404.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomError\Error500.aspx.cs">
+      <DependentUpon>Error500.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomError\Error500.aspx.designer.cs">
+      <DependentUpon>Error500.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
