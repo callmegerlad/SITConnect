@@ -124,9 +124,9 @@ namespace SITConnect
 
         protected void createAccount()
         {
-            string cardNumber = tb_CardNumber.Text.Trim();
-            string cardExpDate = tb_CardExpDate.Text.Trim();
-            string cardVerification = tb_CardVerification.Text.Trim();
+            string cardNumber = HttpUtility.HtmlEncode(tb_CardNumber.Text.Trim());
+            string cardExpDate = HttpUtility.HtmlEncode(tb_CardExpDate.Text.Trim());
+            string cardVerification = HttpUtility.HtmlEncode(tb_CardVerification.Text.Trim());
             try
             {
                 if (!String.IsNullOrEmpty(cardNumber) && !String.IsNullOrEmpty(cardExpDate) && !String.IsNullOrEmpty(cardVerification))
@@ -139,11 +139,11 @@ namespace SITConnect
                             using (SqlDataAdapter sda = new SqlDataAdapter())
                             {
                                 cmd.CommandType = CommandType.Text;
-                                cmd.Parameters.AddWithValue("@FirstName", tb_FirstName.Text.Trim());
-                                cmd.Parameters.AddWithValue("@LastName", tb_LastName.Text.Trim());
-                                cmd.Parameters.AddWithValue("@Email", tb_EmailAddress.Text.Trim());
-                                cmd.Parameters.AddWithValue("@PhoneNumber", tb_PhoneNumber.Text.Trim());
-                                cmd.Parameters.AddWithValue("@DOB", tb_DOB.Text.Trim());
+                                cmd.Parameters.AddWithValue("@FirstName", HttpUtility.HtmlEncode(tb_FirstName.Text.Trim()));
+                                cmd.Parameters.AddWithValue("@LastName", HttpUtility.HtmlEncode(tb_LastName.Text.Trim()));
+                                cmd.Parameters.AddWithValue("@Email", HttpUtility.HtmlEncode(tb_EmailAddress.Text.Trim()));
+                                cmd.Parameters.AddWithValue("@PhoneNumber", HttpUtility.HtmlEncode(tb_PhoneNumber.Text.Trim()));
+                                cmd.Parameters.AddWithValue("@DOB", HttpUtility.HtmlEncode(tb_DOB.Text.Trim()));
                                 cmd.Parameters.AddWithValue("@CreditCardInfo", Convert.ToBase64String(encryptData(cardInfo)));
                                 cmd.Parameters.AddWithValue("@PasswordHash", finalHash);
                                 cmd.Parameters.AddWithValue("@PasswordSalt", salt);

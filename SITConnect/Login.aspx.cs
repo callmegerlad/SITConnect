@@ -53,8 +53,8 @@ namespace SITConnect
             if (validateCaptcha())
             {
                 // using EmailAddress for userid, and session
-                string userid = tb_EmailAddress.Text.ToString().Trim();
-                string pwd = tb_Password.Text.ToString().Trim();
+                string userid = HttpUtility.HtmlEncode(tb_EmailAddress.Text.ToString().Trim());
+                string pwd = HttpUtility.HtmlEncode(tb_Password.Text.ToString().Trim());
 
                 SHA512Managed hashing = new SHA512Managed();
                 string dbHash = getDBHash(userid);
@@ -108,6 +108,7 @@ namespace SITConnect
                 }
                 catch (Exception ex)
                 {
+                    System.Diagnostics.Debug.WriteLine("test1");
                     throw new Exception(ex.ToString());
                 }
                 finally
@@ -151,6 +152,7 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("test2");
                 throw new Exception(ex.ToString());
             }
             finally { connection.Close(); }
@@ -185,6 +187,7 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("test3");
                 throw new Exception(ex.ToString());
             }
             finally { connection.Close(); }
@@ -223,6 +226,7 @@ namespace SITConnect
             }
             catch (WebException ex)
             {
+                System.Diagnostics.Debug.WriteLine("test4");
                 throw ex;
             }
         }
@@ -258,7 +262,7 @@ namespace SITConnect
                         using (SqlDataAdapter sda = new SqlDataAdapter())
                         {
                             cmd.CommandType = CommandType.Text;
-                            cmd.Parameters.AddWithValue("@UserID", tb_EmailAddress.Text.ToString());
+                            cmd.Parameters.AddWithValue("@UserID", HttpUtility.HtmlEncode(tb_EmailAddress.Text.ToString()));
                             cmd.Parameters.AddWithValue("@Attempts", getAttempts() + 1);
                             cmd.Parameters.AddWithValue("@LastAttempt", DateTime.Now.ToString());
                             cmd.Connection = con;
@@ -271,6 +275,7 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("test5");
                 throw new Exception(ex.ToString());
             }
         }
@@ -288,7 +293,7 @@ namespace SITConnect
                         using (SqlDataAdapter sda = new SqlDataAdapter())
                         {
                             cmd.CommandType = CommandType.Text;
-                            cmd.Parameters.AddWithValue("@UserID", tb_EmailAddress.Text.ToString());
+                            cmd.Parameters.AddWithValue("@UserID", HttpUtility.HtmlEncode(tb_EmailAddress.Text.ToString()));
                             cmd.Parameters.AddWithValue("@Attempts", 0);
                             cmd.Parameters.AddWithValue("@LastAttempt", "");
                             cmd.Connection = con;
@@ -301,6 +306,7 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("test6");
                 throw new Exception(ex.ToString());
             }
         }
@@ -312,7 +318,7 @@ namespace SITConnect
             SqlConnection connection = new SqlConnection(MYDBConnectionString);
             string sql = "select Attempts FROM Account WHERE Email=@USERID";
             SqlCommand command = new SqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@USERID", tb_EmailAddress.Text.ToString());
+            command.Parameters.AddWithValue("@USERID", HttpUtility.HtmlEncode(tb_EmailAddress.Text.ToString()));
 
             try
             {
@@ -333,6 +339,7 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("test7");
                 throw new Exception(ex.ToString());
             }
             finally { connection.Close(); }
@@ -346,7 +353,7 @@ namespace SITConnect
             SqlConnection connection = new SqlConnection(MYDBConnectionString);
             string sql = "select LastAttempt FROM Account WHERE Email=@USERID";
             SqlCommand command = new SqlCommand(sql, connection);
-            command.Parameters.AddWithValue("@USERID", tb_EmailAddress.Text.ToString());
+            command.Parameters.AddWithValue("@USERID", HttpUtility.HtmlEncode(tb_EmailAddress.Text.ToString()));
 
             try
             {
@@ -367,6 +374,7 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
+                System.Diagnostics.Debug.WriteLine("test8");
                 throw new Exception(ex.ToString());
             }
             finally { connection.Close(); }
