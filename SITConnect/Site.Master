@@ -77,7 +77,7 @@
                             <input class="nav-searchInput" type="text" placeholder="Search products by name...">
                             <button class="nav-searchButton" type="button"><i class="fas fa-search"></i></button>
                         </li>
-                        <li><a runat="server" class="nav-item" href="~/Contact"><i class="fas fa-shopping-cart"></i></a></li>
+                        <li><a runat="server" class="nav-item" href="#"><i class="fas fa-shopping-cart"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -91,7 +91,7 @@
             <%if (MainContent.Page.Title == "Registration" || MainContent.Page.Title == "Login" || MainContent.Page.Title == "Change Password") {%><%} else {%>
                 <hr />
                 <footer>
-                    <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
+                    <p><b>SITConnect</b> - <i>by Gerald Koh</i></p>
                 </footer>
             <%}%>
         </div>

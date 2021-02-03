@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Page Error" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Error404.aspx.cs" Inherits="SITConnect.CustomError.Error404" %>
+﻿<%@ Page Title="Page Error 404" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Error404.aspx.cs" Inherits="SITConnect.CustomError.Error404" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <link href="../Content/Error.css" rel="stylesheet" type="text/css" />
 

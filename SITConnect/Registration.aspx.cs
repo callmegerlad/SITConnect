@@ -24,10 +24,17 @@ namespace SITConnect
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["errorMsg"] != null)
+            if (Session["UserID"] == null)
             {
-                Page.Items["errorMsg"] = Session["errorMsg"].ToString();
-                Session["errorMsg"] = null;
+                if (Session["errorMsg"] != null)
+                {
+                    Page.Items["errorMsg"] = Session["errorMsg"].ToString();
+                    Session["errorMsg"] = null;
+                }
+            }
+            else
+            {
+                Response.Redirect("~/UserProfile", false);
             }
         }
 
@@ -179,7 +186,8 @@ namespace SITConnect
                 }
                 else
                 {
-                    throw new Exception(ex.ToString());
+                    //throw new Exception(ex.ToString());
+                    Response.Redirect("~/CustomError/Error500", true);
                 }
             }
         }
@@ -200,7 +208,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { }
             return cipherText;

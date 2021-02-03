@@ -43,9 +43,9 @@ namespace SITConnect
                 SITConnect.UserProfile up = new SITConnect.UserProfile();
 
                 string userid = Session["UserID"].ToString();
-                string pwd = tb_PreviousPassword.Text.ToString().Trim();
-                string new_pwd = tb_NewPassword.Text.ToString().Trim();
-                string confirm_new_pwd = tb_NewPasswordConfirm.Text.ToString().Trim();
+                string pwd = HttpUtility.HtmlEncode(tb_PreviousPassword.Text.ToString().Trim());
+                string new_pwd = HttpUtility.HtmlEncode(tb_NewPassword.Text.ToString().Trim());
+                string confirm_new_pwd = HttpUtility.HtmlEncode(tb_NewPasswordConfirm.Text.ToString().Trim());
 
                 // Check if password fields are empty
                 if (pwd == new_pwd)
@@ -112,7 +112,8 @@ namespace SITConnect
                                             }
                                             catch (Exception ex)
                                             {
-                                                throw new Exception(ex.ToString());
+                                                //throw new Exception(ex.ToString());
+                                                Response.Redirect("~/CustomError/Error500", true);
                                             }
                                         }
                                     }
@@ -124,7 +125,8 @@ namespace SITConnect
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.ToString());
+                                //throw new Exception(ex.ToString());
+                                Response.Redirect("~/CustomError/Error500", true);
                             }
                         }
                         else
@@ -154,6 +156,7 @@ namespace SITConnect
         protected void logout_btn_Click(object sender, EventArgs e)
         {
             Logout();
+            Response.Redirect("~/Default", false);
         }
 
         protected void Logout()

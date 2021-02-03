@@ -31,15 +31,22 @@ namespace SITConnect
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Request.UrlReferrer != null && Request.UrlReferrer.ToString().Contains("ChangePassword"))
+            if (Session["UserID"] == null)
             {
-                System.Diagnostics.Debug.WriteLine("refer from "+ Request.UrlReferrer.ToString());
-                Session["successMsg"] = "Your password has been successfully changed!";
+                if (Request.UrlReferrer != null && Request.UrlReferrer.ToString().Contains("ChangePassword"))
+                {
+                    System.Diagnostics.Debug.WriteLine("refer from " + Request.UrlReferrer.ToString());
+                    Session["successMsg"] = "Your password has been successfully changed!";
+                }
+                if (Session["successMsg"] != null)
+                {
+                    Page.Items["successMsg"] = Session["successMsg"].ToString();
+                    Session["successMsg"] = null;
+                }
             }
-            if (Session["successMsg"] != null)
+            else
             {
-                Page.Items["successMsg"] = Session["successMsg"].ToString();
-                Session["successMsg"] = null;
+                Response.Redirect("~/UserProfile", false);
             }
         }
 
@@ -108,8 +115,9 @@ namespace SITConnect
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine("test1");
-                    throw new Exception(ex.ToString());
+                    //System.Diagnostics.Debug.WriteLine("test1");
+                    //throw new Exception(ex.ToString());
+                    Response.Redirect("~/CustomError/Error500", true);
                 }
                 finally
                 {
@@ -152,8 +160,9 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("test2");
-                throw new Exception(ex.ToString());
+                //System.Diagnostics.Debug.WriteLine("test2");
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { connection.Close(); }
             return hash;
@@ -187,8 +196,9 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("test3");
-                throw new Exception(ex.ToString());
+                //System.Diagnostics.Debug.WriteLine("test3");
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { connection.Close(); }
             return salt;
@@ -226,8 +236,10 @@ namespace SITConnect
             }
             catch (WebException ex)
             {
-                System.Diagnostics.Debug.WriteLine("test4");
-                throw ex;
+                //System.Diagnostics.Debug.WriteLine("test4");
+                //throw ex;
+                Response.Redirect("~/CustomError/Error500", true);
+                return results;
             }
         }
 
@@ -275,8 +287,9 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("test5");
-                throw new Exception(ex.ToString());
+                //System.Diagnostics.Debug.WriteLine("test5");
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
         }
 
@@ -306,8 +319,9 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("test6");
-                throw new Exception(ex.ToString());
+                //System.Diagnostics.Debug.WriteLine("test6");
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
         }
 
@@ -339,8 +353,9 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("test7");
-                throw new Exception(ex.ToString());
+                //System.Diagnostics.Debug.WriteLine("test7");
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { connection.Close(); }
             return attempts;
@@ -374,8 +389,9 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("test8");
-                throw new Exception(ex.ToString());
+                //System.Diagnostics.Debug.WriteLine("test8");
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { connection.Close(); }
             return lastAttempt;

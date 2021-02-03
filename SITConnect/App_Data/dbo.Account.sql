@@ -4,7 +4,7 @@
     [LastName]           NVARCHAR (50)  NULL,
     [Email]              NVARCHAR (50)  NULL,
     [PhoneNumber]        NCHAR (10)     NULL,
-    [DOB]                NVARCHAR(MAX)           NULL,
+    [DOB]                NVARCHAR (MAX) NULL,
     [CreditCardInfo]     NVARCHAR (MAX) NULL,
     [PasswordHash]       NVARCHAR (MAX) NULL,
     [PasswordSalt]       NVARCHAR (MAX) NULL,
@@ -17,6 +17,5 @@
     [PasswordHistory2]   NVARCHAR (MAX) NULL,
     [LastPasswordChange] NVARCHAR (MAX) NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
-    UNIQUE NONCLUSTERED ([Email] ASC),
     UNIQUE NONCLUSTERED ([Email] ASC)
 );

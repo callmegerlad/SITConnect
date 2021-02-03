@@ -71,9 +71,9 @@
                 <a class="category-title" href="javascript:void()">Others</a>
             </div>
         </div>
-        <div class="section clearfix section-hot">
+        <%--<div class="section clearfix section-hot">
             <h1 class="title">Hot This Week</h1>
-        </div>
+        </div>--%>
     </div>
 
 </asp:Content>

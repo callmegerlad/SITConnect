@@ -125,6 +125,7 @@
     <Content Include="Content\Main.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\User.css" />
+    <Content Include="CustomError\Error403.aspx" />
     <Content Include="CustomError\Error404.aspx" />
     <Content Include="CustomError\Error500.aspx" />
     <Content Include="Default.aspx" />
@@ -207,6 +208,13 @@
     </Compile>
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CustomError\Error403.aspx.cs">
+      <DependentUpon>Error403.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CustomError\Error403.aspx.designer.cs">
+      <DependentUpon>Error403.aspx</DependentUpon>
     </Compile>
     <Compile Include="CustomError\Error404.aspx.cs">
       <DependentUpon>Error404.aspx</DependentUpon>

@@ -95,13 +95,19 @@ namespace SITConnect
             }
         }
 
+        protected void checkSession()
+        {
+            if (Session["UserID"] == null)
+            {
+                Response.Redirect("~/Login", true);
+            }
+        }
+
         protected void logout(object sender, EventArgs e)
         {
             Session.Clear();
             Session.Abandon();
             Session.RemoveAll();
-
-            Response.Redirect("~/Login", false);
 
             if (Request.Cookies["ASP.NET_SessionId"] != null)
             {
@@ -113,6 +119,8 @@ namespace SITConnect
                 Response.Cookies["AuthToken"].Value = String.Empty;
                 Response.Cookies["AuthToken"].Expires = DateTime.Now.AddMonths(-20);
             }
+
+            Response.Redirect("~/Login", false);
         }
 
         protected void retrieveUserInfo(string userid)
@@ -142,32 +150,32 @@ namespace SITConnect
                         // information
                         if (reader["FirstName"] != DBNull.Value)
                         {
-                            firstName = reader["FirstName"].ToString();
+                            firstName = HttpUtility.HtmlEncode(reader["FirstName"].ToString());
                         }
 
                         if (reader["LastName"] != DBNull.Value)
                         {
-                            lastName = reader["LastName"].ToString();
+                            lastName = HttpUtility.HtmlEncode(reader["LastName"].ToString());
                         }
 
                         if (reader["Email"] != DBNull.Value)
                         {
-                            emailAddress = reader["Email"].ToString();
+                            emailAddress = HttpUtility.HtmlEncode(reader["Email"].ToString());
                         }
 
                         if (reader["PhoneNumber"] != DBNull.Value)
                         {
-                            phoneNumber = reader["PhoneNumber"].ToString().Trim();
+                            phoneNumber = HttpUtility.HtmlEncode(reader["PhoneNumber"].ToString().Trim());
                         }
 
                         if (reader["DOB"] != DBNull.Value)
                         {
-                            dob = reader["DOB"].ToString().Trim();
+                            dob = HttpUtility.HtmlEncode(reader["DOB"].ToString().Trim());
                         }
 
                         if (reader["CreditCardInfo"] != DBNull.Value)
                         {
-                            string str = reader["CreditCardInfo"].ToString();
+                            string str = HttpUtility.HtmlEncode(reader["CreditCardInfo"].ToString());
                             if (str.Length > 0)
                             {
                                 creditCardInfo = Convert.FromBase64String(str);
@@ -183,7 +191,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally
             {
@@ -200,6 +209,7 @@ namespace SITConnect
 
         protected void update()
         {
+            checkSession();
             try
             {
                 using (SqlConnection con = new SqlConnection(MYDBConnectionString))
@@ -210,10 +220,10 @@ namespace SITConnect
                         {
                             cmd.CommandType = CommandType.Text;
                             cmd.Parameters.AddWithValue("@UserID", Session["UserID"].ToString());
-                            cmd.Parameters.AddWithValue("@FirstName", tb_FirstName_Edit.Text.Trim());
-                            cmd.Parameters.AddWithValue("@LastName", tb_LastName_Edit.Text.Trim());
-                            cmd.Parameters.AddWithValue("@PhoneNumber", tb_PhoneNumber_Edit.Text.Trim());
-                            cmd.Parameters.AddWithValue("@DOB", tb_DOB_Edit.Text.Trim());
+                            cmd.Parameters.AddWithValue("@FirstName", HttpUtility.HtmlEncode(tb_FirstName_Edit.Text.Trim()));
+                            cmd.Parameters.AddWithValue("@LastName", HttpUtility.HtmlEncode(tb_LastName_Edit.Text.Trim()));
+                            cmd.Parameters.AddWithValue("@PhoneNumber", HttpUtility.HtmlEncode(tb_PhoneNumber_Edit.Text.Trim()));
+                            cmd.Parameters.AddWithValue("@DOB", HttpUtility.HtmlEncode(tb_DOB_Edit.Text.Trim()));
                             cmd.Connection = con;
                             con.Open();
                             cmd.ExecuteNonQuery();
@@ -225,13 +235,15 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
         }
 
         // Save Credit Card Info
         protected void saveCardBtn_Click(object sender, EventArgs e)
         {
+            checkSession();
             Session["tabNo"] = "3";
             string cardNumber = tb_CardNumber.Text.Trim();
             string cardExpDate = tb_CardExpDate.Text.Trim();
@@ -263,7 +275,8 @@ namespace SITConnect
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.ToString());
+                    //throw new Exception(ex.ToString());
+                    Response.Redirect("~/CustomError/Error500", true);
                 }
             }
             else
@@ -277,6 +290,7 @@ namespace SITConnect
         // Encrypt creditCardInfo
         protected byte[] encryptData(string data)
         {
+            checkSession();
             retrieveUserInfo(Session["UserID"].ToString());
             byte[] cipherText = null;
             try
@@ -290,7 +304,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { }
             return cipherText;
@@ -299,6 +314,7 @@ namespace SITConnect
         // Decrypt creditCardInfo
         protected string decryptData(byte[] cipherText)
         {
+            checkSession();
             string plainText = null;
             try
             {
@@ -324,7 +340,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { }
             return plainText;
@@ -334,11 +351,12 @@ namespace SITConnect
         // CHANGE PASSWORD
         protected void changePassword_Click(object sender, EventArgs e)
         {
+            checkSession();
             Session["tabNo"] = "2";
             string userid = Session["UserID"].ToString();
-            string pwd = tb_CurrentPassword.Text.ToString().Trim();
-            string new_pwd = tb_NewPassword.Text.ToString().Trim();
-            string confirm_new_pwd = tb_NewPasswordConfirm.Text.ToString().Trim();
+            string pwd = HttpUtility.HtmlEncode(tb_CurrentPassword.Text.ToString().Trim());
+            string new_pwd = HttpUtility.HtmlEncode(tb_NewPassword.Text.ToString().Trim());
+            string confirm_new_pwd = HttpUtility.HtmlEncode(tb_NewPasswordConfirm.Text.ToString().Trim());
 
             bool allowPasswordChange = true;
 
@@ -424,7 +442,8 @@ namespace SITConnect
                                             }
                                             catch (Exception ex)
                                             {
-                                                throw new Exception(ex.ToString());
+                                                //throw new Exception(ex.ToString());
+                                                Response.Redirect("~/CustomError/Error500", true);
                                             }
                                         }
                                     }
@@ -436,7 +455,8 @@ namespace SITConnect
                             }
                             catch (Exception ex)
                             {
-                                throw new Exception(ex.ToString());
+                                //throw new Exception(ex.ToString());
+                                Response.Redirect("~/CustomError/Error500", true);
                             }
                         }
                         else
@@ -503,6 +523,7 @@ namespace SITConnect
         // Get PasswordHistory
         public string getPasswordHistory(string no)
         {
+            checkSession();
             string pwdHistory = "";
             SqlConnection connection = new SqlConnection(MYDBConnectionString);
             string sql = "SELECT * FROM Account WHERE Email=@userId";
@@ -524,7 +545,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally
             {
@@ -537,6 +559,7 @@ namespace SITConnect
         // Save Current PasswordHash into PasswordHistory
         public void savePasswordHistory(string currentPassword)
         {
+            checkSession();
             string ph1 = getPasswordHistory("1");
             // If PasswordHistory1 is empty, meaning no prior password history, then save current password to it
             // If PasswordHistory1 is not empty, shift it to PasswordHistory2, then save current password to PasswordHistory1
@@ -564,7 +587,8 @@ namespace SITConnect
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception(ex.ToString());
+                    //throw new Exception(ex.ToString());
+                    Response.Redirect("~/CustomError/Error500", true);
                 }
             }
             
@@ -590,7 +614,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
         }
 
@@ -598,6 +623,7 @@ namespace SITConnect
         // SAVE LAST PASSWORD CHANGE DATETIME
         public void saveLastPasswordChange()
         {
+            checkSession();
             try
             {
                 using (SqlConnection con = new SqlConnection(MYDBConnectionString))
@@ -619,13 +645,15 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
         }
 
         // GET LAST PASSWORD CHANGE
         public string getLastPasswordChange()
         {
+            checkSession();
             string lastPasswordChange = "";
             SqlConnection connection = new SqlConnection(MYDBConnectionString);
             string sql = "SELECT * FROM Account WHERE Email=@userId";
@@ -647,7 +675,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally
             {
@@ -689,7 +718,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { connection.Close(); }
             return hash;
@@ -723,7 +753,8 @@ namespace SITConnect
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString());
+                //throw new Exception(ex.ToString());
+                Response.Redirect("~/CustomError/Error500", true);
             }
             finally { connection.Close(); }
             return salt;
