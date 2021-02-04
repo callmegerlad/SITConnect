@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group">
                         <asp:Label runat="server" class="text-label" AssociatedControlId="tb_PhoneNumber">Phone Number</asp:Label><br />
-                        <asp:Textbox runat="server"  class="text-input text-input-firsthalf" type="text" id="tb_PhoneNumber" placeholder="Enter your phone number" MaxLength="10" required="required" pattern="[0-9]{8,10}" />
+                        <asp:Textbox runat="server"  class="text-input text-input-firsthalf" type="text" id="tb_PhoneNumber" placeholder="Enter your phone number" MaxLength="11" required="required" pattern="[0-9]{8,11}" />
                         <i class="fas fa-phone-alt text-icon text-icon-half"></i>
                         <asp:Label runat="server" class="text-label text-label-half" AssociatedControlId="tb_DOB">Date of Birth</asp:Label>
                         <asp:Textbox runat="server"  class="text-input text-input-secondhalf text-input-secondhalf-icon" type="text" id="tb_DOB" placeholder="Enter your birthdate" required="required" />

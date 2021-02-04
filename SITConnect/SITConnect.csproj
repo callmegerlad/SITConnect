@@ -129,7 +129,6 @@
     <Content Include="CustomError\Error404.aspx" />
     <Content Include="CustomError\Error500.aspx" />
     <Content Include="Default.aspx" />
-    <Content Include="CustomError\Error404.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

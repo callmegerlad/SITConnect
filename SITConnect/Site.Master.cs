@@ -27,13 +27,13 @@ namespace SITConnect
         {
             SITConnect.UserProfile up = new SITConnect.UserProfile();
             TimeSpan ts = DateTime.Now - Convert.ToDateTime(up.getLastPasswordChange());
-            if (ts.Minutes >= maximumPasswordAge)
+            if (ts.TotalMinutes >= maximumPasswordAge)
             {
                 System.Diagnostics.Debug.WriteLine("Password past maximum password age! Need to change password to continue.");
                 Session["passwordError"] = "Your password has expired past the maximum password age! Please change your password to continue...";
                 Response.Redirect("~/ChangePassword", false);
             }
-            System.Diagnostics.Debug.WriteLine("Minutes since last password change: "+ts.Minutes.ToString());
+            System.Diagnostics.Debug.WriteLine("Minutes since last password change: "+ts.TotalMinutes.ToString());
         }
     }
 }

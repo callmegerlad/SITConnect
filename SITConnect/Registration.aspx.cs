@@ -187,7 +187,10 @@ namespace SITConnect
                 else
                 {
                     //throw new Exception(ex.ToString());
-                    Response.Redirect("~/CustomError/Error500", true);
+                    //Response.Redirect("~/CustomError/Error500", true);
+                    Response.StatusCode = 500;
+                    Response.Flush();
+                    Response.End();
                 }
             }
         }
@@ -209,7 +212,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { }
             return cipherText;

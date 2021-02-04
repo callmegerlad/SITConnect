@@ -18,7 +18,7 @@ namespace SITConnect
     {
         // Variables
         // Timeout in minutes when account is locked out
-        int accountLockoutTimeout = 1;
+        int accountLockoutTimeout = 5;
         // DB
         string MYDBConnectionString =
             System.Configuration.ConfigurationManager.ConnectionStrings["MYDBConnection"].ConnectionString;
@@ -117,7 +117,10 @@ namespace SITConnect
                 {
                     //System.Diagnostics.Debug.WriteLine("test1");
                     //throw new Exception(ex.ToString());
-                    Response.Redirect("~/CustomError/Error500", true);
+                    //Response.Redirect("~/CustomError/Error500", true);
+                    Response.StatusCode = 500;
+                    Response.Flush();
+                    Response.End();
                 }
                 finally
                 {
@@ -162,7 +165,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test2");
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { connection.Close(); }
             return hash;
@@ -198,7 +204,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test3");
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { connection.Close(); }
             return salt;
@@ -238,7 +247,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test4");
                 //throw ex;
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
                 return results;
             }
         }
@@ -289,7 +301,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test5");
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
         }
 
@@ -321,7 +336,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test6");
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
         }
 
@@ -355,7 +373,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test7");
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { connection.Close(); }
             return attempts;
@@ -391,7 +412,10 @@ namespace SITConnect
             {
                 //System.Diagnostics.Debug.WriteLine("test8");
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { connection.Close(); }
             return lastAttempt;

@@ -192,7 +192,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally
             {
@@ -236,7 +239,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
         }
 
@@ -276,7 +282,10 @@ namespace SITConnect
                 catch (Exception ex)
                 {
                     //throw new Exception(ex.ToString());
-                    Response.Redirect("~/CustomError/Error500", true);
+                    //Response.Redirect("~/CustomError/Error500", true);
+                    Response.StatusCode = 500;
+                    Response.Flush();
+                    Response.End();
                 }
             }
             else
@@ -305,7 +314,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { }
             return cipherText;
@@ -341,7 +353,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { }
             return plainText;
@@ -366,8 +381,7 @@ namespace SITConnect
             if (lastPasswordChange != "")
             {
                 TimeSpan ts = DateTime.Now - Convert.ToDateTime(lastPasswordChange);
-                System.Diagnostics.Debug.WriteLine("timespan: "+ts);
-                if (ts.Minutes < minimumPasswordAge)
+                if (ts.TotalMinutes < minimumPasswordAge)
                 {
                     System.Diagnostics.Debug.WriteLine("Password change before minimum password age");
                     Session["errorMsg"] = "Please wait a while before changing your password again! Please try again later...";
@@ -443,7 +457,10 @@ namespace SITConnect
                                             catch (Exception ex)
                                             {
                                                 //throw new Exception(ex.ToString());
-                                                Response.Redirect("~/CustomError/Error500", true);
+                                                //Response.Redirect("~/CustomError/Error500", true);
+                                                Response.StatusCode = 500;
+                                                Response.Flush();
+                                                Response.End();
                                             }
                                         }
                                     }
@@ -456,7 +473,10 @@ namespace SITConnect
                             catch (Exception ex)
                             {
                                 //throw new Exception(ex.ToString());
-                                Response.Redirect("~/CustomError/Error500", true);
+                                //Response.Redirect("~/CustomError/Error500", true);
+                                Response.StatusCode = 500;
+                                Response.Flush();
+                                Response.End();
                             }
                         }
                         else
@@ -546,7 +566,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally
             {
@@ -588,7 +611,10 @@ namespace SITConnect
                 catch (Exception ex)
                 {
                     //throw new Exception(ex.ToString());
-                    Response.Redirect("~/CustomError/Error500", true);
+                    //Response.Redirect("~/CustomError/Error500", true);
+                    Response.StatusCode = 500;
+                    Response.Flush();
+                    Response.End();
                 }
             }
             
@@ -615,7 +641,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
         }
 
@@ -646,7 +675,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
         }
 
@@ -676,7 +708,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally
             {
@@ -719,7 +754,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { connection.Close(); }
             return hash;
@@ -754,7 +792,10 @@ namespace SITConnect
             catch (Exception ex)
             {
                 //throw new Exception(ex.ToString());
-                Response.Redirect("~/CustomError/Error500", true);
+                //Response.Redirect("~/CustomError/Error500", true);
+                Response.StatusCode = 500;
+                Response.Flush();
+                Response.End();
             }
             finally { connection.Close(); }
             return salt;

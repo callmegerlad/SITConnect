@@ -11,7 +11,12 @@ namespace SITConnect
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["UserID"] == null)
+            {
+                Response.StatusCode = 403;
+                Response.Flush();
+                Response.End();
+            }
         }
     }
 }

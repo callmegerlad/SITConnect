@@ -24,7 +24,12 @@ namespace SITConnect
         {
             if (Session["passwordError"] == null)
             {
-                Response.Redirect("~/Default", false);
+                if (!Page.IsPostBack)
+                {
+                    Response.StatusCode = 403;
+                    Response.Flush();
+                    Response.End();
+                }
             }
             else
             {
@@ -47,7 +52,6 @@ namespace SITConnect
                 string new_pwd = HttpUtility.HtmlEncode(tb_NewPassword.Text.ToString().Trim());
                 string confirm_new_pwd = HttpUtility.HtmlEncode(tb_NewPasswordConfirm.Text.ToString().Trim());
 
-                // Check if password fields are empty
                 if (pwd == new_pwd)
                 {
                     Session["passwordError"] = "Your new password cannot be same as current password. Please try again...";
@@ -113,7 +117,10 @@ namespace SITConnect
                                             catch (Exception ex)
                                             {
                                                 //throw new Exception(ex.ToString());
-                                                Response.Redirect("~/CustomError/Error500", true);
+                                                //Response.Redirect("~/CustomError/Error500", true);
+                                                Response.StatusCode = 500;
+                                                Response.Flush();
+                                                Response.End();
                                             }
                                         }
                                     }
@@ -126,7 +133,10 @@ namespace SITConnect
                             catch (Exception ex)
                             {
                                 //throw new Exception(ex.ToString());
-                                Response.Redirect("~/CustomError/Error500", true);
+                                //Response.Redirect("~/CustomError/Error500", true);
+                                Response.StatusCode = 500;
+                                Response.Flush();
+                                Response.End();
                             }
                         }
                         else
