@@ -224,7 +224,7 @@ namespace SITConnect
 
             // send a GET request to Google along with response and secret key
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create
-                ("https://www.google.com/recaptcha/api/siteverify?secret=6LeAKSQaAAAAACuQ3ZzCeUZdqD9BjhEvLNCWuKIR &response="+captchaResponse);
+                ("https://www.google.com/recaptcha/api/siteverify?secret=SECRETKEY &response="+captchaResponse);
 
             try
             {
